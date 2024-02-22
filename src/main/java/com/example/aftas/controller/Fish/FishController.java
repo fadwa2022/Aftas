@@ -5,6 +5,7 @@ import com.example.aftas.dto.Response.CompetitionDtoResponse;
 import com.example.aftas.services.CompetitionService;
 import com.example.aftas.services.FishService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ public class FishController {
         this.fishService = fishService;
     }
     @GetMapping
+    @PreAuthorize("hasAuthority('SCOP_USER')")
     public List<FishDto> getAll(){
         return this.fishService.getAllFishs();
     }
