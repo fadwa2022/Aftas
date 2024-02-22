@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CompetitionController {
         this.competitionService = competitionService;
     }
     @GetMapping
+    @PreAuthorize("hasAuthority('SCOPE_MANAGER')")
     public List<CompetitionDtoResponse> getAll(){
         return this.competitionService.getAllCompetition();
     }
