@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/fish")
+@CrossOrigin
+
 public class FishController {
     private FishService fishService;
     @Autowired
@@ -23,7 +24,6 @@ public class FishController {
         this.fishService = fishService;
     }
     @GetMapping
-    @PreAuthorize("hasAuthority('SCOP_USER')")
     public List<FishDto> getAll(){
         return this.fishService.getAllFishs();
     }

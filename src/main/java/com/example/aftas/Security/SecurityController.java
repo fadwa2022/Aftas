@@ -1,7 +1,5 @@
 package com.example.aftas.Security;
 
-import com.example.aftas.dto.Request.LoginRequestDto;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
+
 public class SecurityController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -30,18 +29,23 @@ public class SecurityController {
     }
 
     @PostMapping("/login")
-    public Map<String,String> login(@RequestBody LoginRequestDto auth){
-        System.out.println("hkllh");
-        Authentication authentication = authenticationManager.authenticate(
-             new UsernamePasswordAuthenticationToken(auth.getUsername(),auth.getPassword())
-        );
+    public Map<String,String> login( String username ,String password){
+        Authentication authentication;
+        try {
+             authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username,password)
+            );
+        }catch(Exception ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+
         Instant instant =Instant.now();
        String scop = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
 
         JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
                 .issuedAt(instant)
                 .expiresAt(instant.plus(20, ChronoUnit.MINUTES))
-                .subject(auth.getUsername())
+                .subject(username)
                 .claim("scope",scop)
                 .build();
 

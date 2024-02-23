@@ -21,7 +21,7 @@ public class RankingDtoRequest {
     public Ranking toModel(){
         Member membre1 = Member
                 .builder()
-                .name(member_id)
+                .username(member_id)
                 .build();
         Competition competition1= Competition.builder().code(competition_id).build();
         return Ranking.

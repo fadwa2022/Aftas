@@ -1,26 +1,19 @@
 package com.example.aftas.services.Impl;
 
-import com.example.aftas.SuppEntity.CompetitionMembres;
-import com.example.aftas.dto.Request.CompetitionDtoRequest;
 import com.example.aftas.dto.Request.MemberDtoRequest;
-import com.example.aftas.dto.Response.CompetitionDtoResponse;
 import com.example.aftas.dto.Response.MemberDtoResponse;
 import com.example.aftas.dto.Response.RankingDtoResponse;
 import com.example.aftas.entity.Competition;
 import com.example.aftas.entity.Member;
 import com.example.aftas.entity.Ranking;
 import com.example.aftas.exception.MembreException;
-import com.example.aftas.mapper.MaperRequest_Response;
 import com.example.aftas.mapper.Mapper;
-import com.example.aftas.repository.CompetitionMembresRepository;
-import com.example.aftas.repository.CompetitionRepository;
-import com.example.aftas.repository.MemberRepository;
-import com.example.aftas.repository.RankingRepository;
+import com.example.aftas.repository.*;
 import com.example.aftas.services.MemberService;
-import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Null;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,27 +26,28 @@ public class MemberServiceImpl implements MemberService {
     private MemberRepository repository;
     private RankingRepository rankingRepository;
     private CompetitionRepository competitionRepository;
+    private AuthoritiesRepository authoritiesRepository;
     private Mapper<Member,MemberDtoResponse> mapper;
     private Mapper <Ranking, RankingDtoResponse> mapperranking;
-    private MaperRequest_Response<CompetitionDtoRequest,CompetitionDtoResponse> mapperCompetitionRequest;
-    private Mapper<Competition,CompetitionDtoResponse> mapperCompitition;
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     public MemberServiceImpl(
             MemberRepository repository,
             @Qualifier("membreMapper") Mapper<Member,MemberDtoResponse> mapper,
             RankingRepository rankingRepository,
             CompetitionRepository competitionRepository,
-            MaperRequest_Response<CompetitionDtoRequest,CompetitionDtoResponse> mapperCompetitionRequest,
-            Mapper<Competition,CompetitionDtoResponse> mapperCompitition,
-            Mapper <Ranking, RankingDtoResponse> mapperranking
+            PasswordEncoder passwordEncoder,
+            Mapper <Ranking, RankingDtoResponse> mapperranking,
+            AuthoritiesRepository authoritiesRepository
     ){
         this.repository=repository;
         this.mapper=mapper;
         this.rankingRepository=rankingRepository;
         this.competitionRepository=competitionRepository;
-        this.mapperCompetitionRequest=mapperCompetitionRequest;
-        this.mapperCompitition=mapperCompitition;
+       this.passwordEncoder = passwordEncoder;
         this.mapperranking=mapperranking;
+        this.authoritiesRepository=authoritiesRepository;
     }
 
 
@@ -114,6 +108,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member addMember(Member member) {
+         member.setPassword(passwordEncoder.encode("1234"));
         return repository.save(member);
     }
 
@@ -138,4 +133,21 @@ public class MemberServiceImpl implements MemberService {
     public MemberDtoResponse getMemberByNum() {
         return null;
     }
+
+   /* @Override
+    public void AddAuthoritiesToMember(String username, String authoritieName) {
+        Member member= repository.findByUsername(username).get();
+        authorities authorities =authoritiesRepository.findByAuthoritieName(authoritieName);
+        member.getAuthorities().add(authorities);
+
+    }*/
+
+    @Override
+    public Member LoadMemberByMemberUserName(String MemberUserName) {
+        return repository.findByUsername(MemberUserName).get();
+    }
+
+
+
+
 }

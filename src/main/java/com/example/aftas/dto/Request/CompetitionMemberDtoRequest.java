@@ -19,7 +19,7 @@ public class CompetitionMemberDtoRequest {
     public CompetitionMembres toModel(){
         Member membre1 = Member
                 .builder()
-                .name(memberNum)
+                .username(memberNum)
                 .build();
         Competition competition1= Competition.builder().code(competitionCode).build();
         return CompetitionMembres.
