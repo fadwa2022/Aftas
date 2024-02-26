@@ -5,12 +5,12 @@ import com.example.aftas.entity.Ranking;
 import com.example.aftas.services.MemberService;
 import com.example.aftas.services.RankingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/ranking")
 public class RunkingController {
     private RankingService rankingService;

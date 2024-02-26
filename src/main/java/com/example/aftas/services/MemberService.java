@@ -5,7 +5,7 @@ import com.example.aftas.dto.Request.CompetitionDtoRequest;
 import com.example.aftas.dto.Request.MemberDtoRequest;
 import com.example.aftas.dto.Response.MemberDtoResponse;
 import com.example.aftas.dto.Response.RankingDtoResponse;
-import com.example.aftas.entity.Competition;
+
 import com.example.aftas.entity.Member;
 import com.example.aftas.entity.Ranking;
 
@@ -18,4 +18,8 @@ public interface MemberService {
     public List<MemberDtoResponse> getAllMembers();
     public  List<RankingDtoResponse> getAllRankingByCompetition(String competitionCode);
     public MemberDtoResponse getMemberByNum();
+    //public void AddAuthoritiesToMember(String username,String authoritieName);
+    public Member LoadMemberByMemberUserName(String MemberUserName);
+   // Authorities addNewRole(Authorities authorities);
+
 }
